@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'domain_provider.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -12,12 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MyApp',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
-      home: PostPage(title: 'FlutterTaipei :)'),
-    );
+        title: 'MyApp',
+        theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+        ),
+        home: DomainProvider(child: PostPage(title: 'FlutterTaipei :')));
   }
 }
 
@@ -102,8 +103,7 @@ class _PostPageState extends State<PostPage> {
     List<dynamic> result = jsonDecode(response.body);
     if (sort == _sortWithId) {
       result.sort((a, b) {
-        return int.parse(a['id'].toString())
-            .compareTo(int.parse(b['id'].toString()));
+        return int.parse(a['id'].toString()).compareTo(int.parse(b['id'].toString()));
       });
     } else if (sort == _sortWithTitle) {
       result.sort((a, b) {
