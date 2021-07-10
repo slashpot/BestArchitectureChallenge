@@ -1,5 +1,4 @@
 import 'package:best_architecture_challenge/model/Post.dart';
-import 'package:best_architecture_challenge/model/PostSortingType.dart';
 import 'package:best_architecture_challenge/post/cubit/post_cubit.dart';
 import 'package:best_architecture_challenge/post/cubit/post_state.dart';
 import 'package:best_architecture_challenge/repository/PostRepository.dart';

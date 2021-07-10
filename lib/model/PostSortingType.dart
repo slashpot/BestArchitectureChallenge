@@ -1,4 +1,0 @@
-enum PostSortingType {
-  id,
-  title
-}
