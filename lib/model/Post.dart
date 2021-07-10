@@ -6,10 +6,10 @@ class Post extends Equatable {
   final String title;
   final String body;
 
-  Post(this.userId, this.id, this.title, this.body);
+  Post({required this.userId, required this.id, required this.title, required this.body});
 
   factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(json['userId'], json['id'], json['title'], json['body']);
+    return Post(userId: json['userId'], id: json['id'], title: json['title'], body: json['body']);
   }
 
   @override
