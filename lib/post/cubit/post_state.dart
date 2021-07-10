@@ -10,7 +10,7 @@ class PostInitial extends PostState {}
 class PostFetchSuccess extends PostState with EquatableMixin {
   final Iterable<Post> posts;
 
-  PostFetchSuccess(this.posts);
+  PostFetchSuccess({required this.posts});
 
   @override
   List<Object?> get props => [posts];
