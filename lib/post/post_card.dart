@@ -12,6 +12,7 @@ class PostCard extends StatelessWidget {
     String presentId = id == null ? '' : id.toString();
     String presentTitle = title == null ? '' : title as String;
     String presentBody = body == null ? '' : body as String;
+    
     return Container(
         padding: EdgeInsets.all(8),
         child: RichText(

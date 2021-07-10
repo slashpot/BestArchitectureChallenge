@@ -10,9 +10,9 @@ abstract class IPostRepository {
 class PostRepository implements IPostRepository {
   @override
   Future<List<Post>>  getPostsAsync() async {
-    var url = Uri.https('jsonplaceholder.typicode.com', '/posts');
-    var response = await http.get(url);
-    List<dynamic> result = jsonDecode(response.body);
+    final url = Uri.https('jsonplaceholder.typicode.com', '/posts');
+    final response = await http.get(url);
+    final List<dynamic> result = jsonDecode(response.body);
     return result.map((e) => Post.fromJson(e)).toList();
   }
 }
