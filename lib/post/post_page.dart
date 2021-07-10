@@ -1,3 +1,4 @@
+import 'package:best_architecture_challenge/post/post_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,26 +50,11 @@ class _PostPageState extends State<PostPage> {
             return ListView.separated(
               itemCount: state.posts.length,
               itemBuilder: (context, index) {
-                String id = state.posts[index].id.toString();
-                String title = state.posts[index].title.toString();
-                String body = state.posts[index].body.toString();
-                return Container(
-                    padding: EdgeInsets.all(8),
-                    child: RichText(
-                      text: TextSpan(
-                        style: DefaultTextStyle.of(context).style,
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: "$id. $title",
-                            style: TextStyle(fontSize: 18, color: Colors.red),
-                          ),
-                          TextSpan(
-                            text: '\n' + body,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ));
+                return PostCard(
+                  id: state.posts[index].id,
+                  title: state.posts[index].title,
+                  body: state.posts[index].body,
+                );
               },
               separatorBuilder: (context, index) {
                 return Divider();
