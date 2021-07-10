@@ -8,7 +8,7 @@ abstract class PostState {}
 class PostInitial extends PostState {}
 
 class PostFetchSuccess extends PostState with EquatableMixin {
-  final Iterable<Post> posts;
+  final List<Post> posts;
 
   PostFetchSuccess({required this.posts});
 

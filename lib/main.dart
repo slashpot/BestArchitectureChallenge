@@ -1,10 +1,9 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
+import 'package:best_architecture_challenge/post/cubit/post_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'domain_provider.dart';
+import 'post/cubit/post_state.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,15 +31,10 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  static const int _sortWithId = 1;
-  static const int _sortWithTitle = 2;
-
-  List<dynamic> _posts = [];
-
   @override
   void initState() {
     super.initState();
-    _fetchData(_sortWithId);
+    BlocProvider.of<PostCubit>(context).fetchData(PostSortingType.id);
   }
 
   @override
@@ -54,64 +48,51 @@ class _PostPageState extends State<PostPage> {
                 itemBuilder: (context) => [
                       PopupMenuItem(
                         child: Text('使用id排序'),
-                        value: _sortWithId,
+                        value: PostSortingType.id,
                       ),
                       PopupMenuItem(
                         child: Text('使用title排序'),
-                        value: _sortWithTitle,
+                        value: PostSortingType.title,
                       )
                     ],
-                onSelected: (int value) {
-                  _fetchData(value);
+                onSelected: (PostSortingType selectedType) {
+                  BlocProvider.of<PostCubit>(context).fetchData(selectedType);
                 })
           ],
         ),
-        body: ListView.separated(
-          itemCount: _posts.length,
-          itemBuilder: (context, index) {
-            String id = _posts[index]['id'].toString();
-            String title = _posts[index]['title'].toString();
-            String body = _posts[index]['body'].toString();
-            return Container(
-                padding: EdgeInsets.all(8),
-                child: RichText(
-                  text: TextSpan(
-                    style: DefaultTextStyle.of(context).style,
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: "$id. $title",
-                        style: TextStyle(fontSize: 18, color: Colors.red),
+        body: BlocBuilder<PostCubit, PostState>(builder: (context, state) {
+          if (state is PostFetchSuccess) {
+            return ListView.separated(
+              itemCount: state.posts.length,
+              itemBuilder: (context, index) {
+                String id = state.posts[index].id.toString();
+                String title = state.posts[index].title.toString();
+                String body = state.posts[index].body.toString();
+                return Container(
+                    padding: EdgeInsets.all(8),
+                    child: RichText(
+                      text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: "$id. $title",
+                            style: TextStyle(fontSize: 18, color: Colors.red),
+                          ),
+                          TextSpan(
+                            text: '\n' + body,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
-                      TextSpan(
-                        text: '\n' + body,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ));
-          },
-          separatorBuilder: (context, index) {
-            return Divider();
-          },
-        ));
-  }
-
-  void _fetchData(int sort) async {
-    var url = Uri.https('jsonplaceholder.typicode.com', '/posts');
-    var response = await http.get(url);
-    print("response=${response.body}");
-    List<dynamic> result = jsonDecode(response.body);
-    if (sort == _sortWithId) {
-      result.sort((a, b) {
-        return int.parse(a['id'].toString()).compareTo(int.parse(b['id'].toString()));
-      });
-    } else if (sort == _sortWithTitle) {
-      result.sort((a, b) {
-        return a['title'].toString().compareTo(b['title'].toString());
-      });
-    }
-    setState(() {
-      _posts = result;
-    });
+                    ));
+              },
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
+            );
+          } else {
+            return Container();
+          }
+        }));
   }
 }
